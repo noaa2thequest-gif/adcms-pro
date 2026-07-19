@@ -5,12 +5,27 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import FleetOverview from "./pages/FleetOverview";
+import DefectControl from "./pages/DefectControl";
+import NewDefect from "./pages/NewDefect";
+import CabinDefects from "./pages/CabinDefects";
+import MelManagement from "./pages/MelManagement";
+import MccCenter from "./pages/MccCenter";
+import Stores from "./pages/Stores";
+import AircraftDetail from "./pages/AircraftDetail";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/fleet"} component={FleetOverview} />
+      <Route path={"/defect-control"} component={DefectControl} />
+      <Route path={"/new-defect"} component={NewDefect} />
+      <Route path={"/cabin-defects"} component={CabinDefects} />
+      <Route path={"/mel-management"} component={MelManagement} />
+      <Route path={"/mcc-center"} component={MccCenter} />
+      <Route path={"/stores"} component={Stores} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

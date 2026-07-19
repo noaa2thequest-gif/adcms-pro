@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, aircraft, InsertAircraft, defects, InsertDefect, melItems, InsertMelItem, cabinDefects, InsertCabinDefect, actionLogs, InsertActionLog, spareParts, InsertSparePart } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,165 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Aircraft queries
+export async function listAircraft() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(aircraft).orderBy(aircraft.registration);
+}
+
+export async function getAircraftById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(aircraft).where(eq(aircraft.id, id)).limit(1);
+  return result[0];
+}
+
+export async function getAircraftByRegistration(registration: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(aircraft).where(eq(aircraft.registration, registration)).limit(1);
+  return result[0];
+}
+
+export async function createAircraft(data: InsertAircraft) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(aircraft).values(data);
+  return result;
+}
+
+export async function updateAircraft(id: number, data: Partial<InsertAircraft>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(aircraft).set(data).where(eq(aircraft.id, id));
+}
+
+// Defect queries
+export async function listDefects(aircraftId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  if (aircraftId) {
+    return db.select().from(defects).where(eq(defects.aircraftId, aircraftId)).orderBy(defects.createdAt);
+  }
+  return db.select().from(defects).orderBy(defects.createdAt);
+}
+
+export async function getDefectById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(defects).where(eq(defects.id, id)).limit(1);
+  return result[0];
+}
+
+export async function createDefect(data: InsertDefect) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(defects).values(data);
+  return result;
+}
+
+export async function updateDefect(id: number, data: Partial<InsertDefect>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(defects).set(data).where(eq(defects.id, id));
+}
+
+// MEL queries
+export async function listMelItems(defectId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  if (defectId) {
+    return db.select().from(melItems).where(eq(melItems.defectId, defectId)).limit(1);
+  }
+  return db.select().from(melItems);
+}
+
+export async function getMelItemById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(melItems).where(eq(melItems.id, id)).limit(1);
+  return result[0];
+}
+
+export async function createMelItem(data: InsertMelItem) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(melItems).values(data);
+  return result;
+}
+
+export async function updateMelItem(id: number, data: Partial<InsertMelItem>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(melItems).set(data).where(eq(melItems.id, id));
+}
+
+// Cabin defect queries
+export async function listCabinDefects(aircraftId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  if (aircraftId) {
+    return db.select().from(cabinDefects).where(eq(cabinDefects.aircraftId, aircraftId)).orderBy(cabinDefects.createdAt);
+  }
+  return db.select().from(cabinDefects).orderBy(cabinDefects.createdAt);
+}
+
+export async function getCabinDefectById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(cabinDefects).where(eq(cabinDefects.id, id)).limit(1);
+  return result[0];
+}
+
+export async function createCabinDefect(data: InsertCabinDefect) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(cabinDefects).values(data);
+  return result;
+}
+
+export async function updateCabinDefect(id: number, data: Partial<InsertCabinDefect>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(cabinDefects).set(data).where(eq(cabinDefects.id, id));
+}
+
+// Action log queries
+export async function listActionLogs(defectId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(actionLogs).where(eq(actionLogs.defectId, defectId)).orderBy(actionLogs.timestamp);
+}
+
+export async function createActionLog(data: InsertActionLog) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(actionLogs).values(data);
+}
+
+// Spare parts queries
+export async function listSpareParts() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(spareParts).orderBy(spareParts.partCode);
+}
+
+export async function getSparePartById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(spareParts).where(eq(spareParts.id, id)).limit(1);
+  return result[0];
+}
+
+export async function createSparePart(data: InsertSparePart) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(spareParts).values(data);
+}
+
+export async function updateSparePart(id: number, data: Partial<InsertSparePart>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(spareParts).set(data).where(eq(spareParts.id, id));
+}
