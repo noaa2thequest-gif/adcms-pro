@@ -1,5 +1,5 @@
-import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
+import { eq } from "drizzle-orm";
 import { InsertUser, users, aircraft, InsertAircraft, defects, InsertDefect, melItems, InsertMelItem, cabinDefects, InsertCabinDefect, actionLogs, InsertActionLog, spareParts, InsertSparePart } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -250,4 +250,16 @@ export async function updateSparePart(id: number, data: Partial<InsertSparePart>
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return db.update(spareParts).set(data).where(eq(spareParts.id, id));
+}
+
+export async function deleteDefect(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.delete(defects).where(eq(defects.id, id));
+}
+
+export async function deleteSparePartById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.delete(spareParts).where(eq(spareParts.id, id));
 }

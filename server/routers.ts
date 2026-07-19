@@ -129,6 +129,15 @@ export const appRouter = router({
         if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
         return db.updateDefect(input.id, { status: "CLOSED" });
       }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (!isAdmin(ctx.user?.role)) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Only admins can delete defects" });
+        }
+        return db.deleteDefect(input.id);
+      }),
   }),
 
   // MEL procedures
@@ -362,6 +371,15 @@ export const appRouter = router({
         }
         const { id, ...updates } = input;
         return db.updateSparePart(id, updates);
+      }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (!isAdmin(ctx.user?.role)) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Only admins can delete spare parts" });
+        }
+        return db.deleteSparePartById(input.id);
       }),
   }),
 });
