@@ -5,22 +5,27 @@ import { startLogin } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Menu, X, LogOut, Home, Plane, AlertCircle, Plus, FileText, Settings, Package } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState } from "react";
 
 export default function Navigation() {
   const [, navigate] = useLocation();
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  const menuItems = [
-    { label: "الرئيسية", icon: Home, path: "/" },
-    { label: "أسطول الطائرات", icon: Plane, path: "/fleet" },
-    { label: "التحكم بالأعطال", icon: AlertCircle, path: "/defect-control" },
-    { label: "إضافة عطل جديد", icon: Plus, path: "/new-defect" },
-    { label: "أعطال المقصورة", icon: FileText, path: "/cabin-defects" },
-    { label: "إدارة الصيانة المؤجلة", icon: Settings, path: "/mel-management" },
-    { label: "مركز التحكم بالصيانة", icon: AlertCircle, path: "/mcc-center" },
-    { label: "المستودع والقطع", icon: Package, path: "/stores" },
+  const allMenuItems = [
+    { label: "الرئيسية", icon: Home, path: "/", roles: ["user", "admin", "mcc", "cabin"] },
+    { label: "أسطول الطائرات", icon: Plane, path: "/fleet", roles: ["user", "admin", "mcc", "cabin"] },
+    { label: "التحكم بالأعطال", icon: AlertCircle, path: "/defect-control", roles: ["admin", "mcc"] },
+    { label: "إضافة عطل جديد", icon: Plus, path: "/new-defect", roles: ["admin", "mcc"] },
+    { label: "أعطال المقصورة", icon: FileText, path: "/cabin-defects", roles: ["admin", "cabin"] },
+    { label: "إدارة الصيانة المؤجلة", icon: Settings, path: "/mel-management", roles: ["admin", "mcc"] },
+    { label: "مركز التحكم بالصيانة", icon: AlertCircle, path: "/mcc-center", roles: ["admin", "mcc"] },
+    { label: "المستودع والقطع", icon: Package, path: "/stores", roles: ["admin"] },
   ];
+
+  const menuItems = allMenuItems.filter((item) => 
+    !user || item.roles.includes(user.role)
+  );
 
   const handleNavigate = (path: string) => {
     navigate(path);

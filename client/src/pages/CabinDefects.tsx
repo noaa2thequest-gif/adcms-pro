@@ -6,11 +6,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, AlertTriangle, Plus, ArrowRight } from "lucide-react";
+import { Loader2, AlertTriangle, Plus, ArrowRight, Lock } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function CabinDefects() {
+  const { user } = useAuth();
+  const isCabinOrAdmin = user?.role === "cabin" || user?.role === "admin";
   const { data: aircraft, isLoading: loadingAircraft } = trpc.aircraft.list.useQuery();
   const { data: cabinDefects, refetch: refetchCabinDefects } = trpc.cabinDefect.list.useQuery({});
 
@@ -78,6 +81,26 @@ export default function CabinDefects() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isCabinOrAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Card className="w-96">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Lock className="w-5 h-5" />
+              Access Denied
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600">
+              Only Cabin Department and Admins can access this section.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     );
   }

@@ -78,7 +78,7 @@
 - [x] Validate MEL-required fields in New Defect Form
 - [ ] Persist and use openDate field in defects
 - [ ] Tighten RBAC enforcement across all procedures
-- [ ] Implement role-based UI restrictions (show/hide features)
+- [x] Implement role-based UI restrictions (show/hide features)
 - [x] Add inventory search and filtering
 - [x] Add low stock alerts to Stores page
 - [x] Display action history per defect on detail view
