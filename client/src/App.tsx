@@ -15,6 +15,7 @@ import MccCenter from "./pages/MccCenter";
 import Stores from "./pages/Stores";
 import AircraftDetail from "./pages/AircraftDetail";
 import Reports from "./pages/Reports";
+import UserManagement from "./pages/UserManagement";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -29,6 +30,7 @@ function Router() {
       <Route path={"/mcc-center"} component={MccCenter} />
       <Route path={"/stores"} component={Stores} />
       <Route path={"/reports"} component={Reports} />
+      <Route path={"/user-management"} component={UserManagement} />
       <Route path={"/aircraft/:id"} component={AircraftDetail} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
