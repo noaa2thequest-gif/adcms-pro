@@ -21,7 +21,7 @@ export default function Navigation() {
     { label: "مركز التحكم بالصيانة", icon: AlertCircle, path: "/mcc-center", roles: ["admin", "mcc"] },
     { label: "المستودع والقطع", icon: Package, path: "/stores", roles: ["admin"] },
     { label: "التقارير والتصدير", icon: BarChart3, path: "/reports", roles: ["admin", "mcc"] },
-    { label: "Surveillance & SAFA", icon: Eye, path: "/surveillance", roles: ["admin", "quality_auditor", "supervisor", "technician", "surveillance"] },
+    { label: "Surveillance & SAFA", icon: Eye, path: "/surveillance", roles: ["user", "admin", "mcc", "cabin", "quality_auditor", "supervisor", "technician", "surveillance"] },
     { label: "إدارة المستخدمين", icon: Users, path: "/user-management", roles: ["admin"] },
   ];
 
