@@ -12,16 +12,16 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
 
   const allMenuItems = [
-    { label: "Home", icon: Home, path: "/", roles: ["user", "admin", "mcc", "cabin"] },
-    { label: "Fleet Overview", icon: Plane, path: "/fleet", roles: ["user", "admin", "mcc"] },
-    { label: "Defect Control", icon: AlertCircle, path: "/defect-control", roles: ["admin", "mcc"] },
-    { label: "New Defect", icon: Plus, path: "/new-defect", roles: ["admin", "mcc", "cabin"] },
-    { label: "Cabin Defects", icon: FileText, path: "/cabin-defects", roles: ["admin", "cabin"] },
-    { label: "MEL Management", icon: Settings, path: "/mel-management", roles: ["admin", "mcc"] },
-    { label: "MCC Center", icon: AlertCircle, path: "/mcc-center", roles: ["admin", "mcc"] },
-    { label: "Stores & Inventory", icon: Package, path: "/stores", roles: ["admin"] },
-    { label: "Reports", icon: BarChart3, path: "/reports", roles: ["admin", "mcc"] },
-    { label: "User Management", icon: Users, path: "/user-management", roles: ["admin"] },
+    { label: "الرئيسية", icon: Home, path: "/", roles: ["user", "admin", "mcc", "cabin"] },
+    { label: "أسطول الطائرات", icon: Plane, path: "/fleet", roles: ["user", "admin", "mcc", "cabin"] },
+    { label: "التحكم بالأعطال", icon: AlertCircle, path: "/defect-control", roles: ["admin", "mcc"] },
+    { label: "إضافة عطل جديد", icon: Plus, path: "/new-defect", roles: ["admin", "mcc"] },
+    { label: "أعطال المقصورة", icon: FileText, path: "/cabin-defects", roles: ["admin", "cabin"] },
+    { label: "إدارة الصيانة المؤجلة", icon: Settings, path: "/mel-management", roles: ["admin", "mcc"] },
+    { label: "مركز التحكم بالصيانة", icon: AlertCircle, path: "/mcc-center", roles: ["admin", "mcc"] },
+    { label: "المستودع والقطع", icon: Package, path: "/stores", roles: ["admin"] },
+    { label: "التقارير والتصدير", icon: BarChart3, path: "/reports", roles: ["admin", "mcc"] },
+    { label: "إدارة المستخدمين", icon: Users, path: "/user-management", roles: ["admin"] },
   ];
 
   const menuItems = allMenuItems.filter((item) => 
