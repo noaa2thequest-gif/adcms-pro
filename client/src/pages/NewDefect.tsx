@@ -40,6 +40,13 @@ export default function NewDefect() {
         return;
       }
 
+      // Validate MEL fields if MEL is selected
+      if (formData.isMel && !formData.melCategory) {
+        toast.error("Please select a MEL category");
+        setIsSubmitting(false);
+        return;
+      }
+
       // Create defect
       const defectResult = await createDefectMutation.mutateAsync({
         aircraftId: parseInt(formData.aircraftId),

@@ -30,6 +30,7 @@ export default function Stores() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPartId, setSelectedPartId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [partCode, setPartCode] = useState("");
   const [description, setDescription] = useState("");
@@ -115,17 +116,23 @@ export default function Stores() {
     );
   }
 
-  const outOfStock = spareParts?.filter((p: any) => p.quantity === 0) || [];
-  const lowStock = spareParts?.filter((p: any) => p.quantity > 0 && p.quantity <= (p.minStock || 2)) || [];
-  const inStock = spareParts?.filter((p: any) => p.quantity > (p.minStock || 2)) || [];
+  const filteredParts = spareParts?.filter((p: any) => 
+    p.partCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.description.toLowerCase().includes(searchQuery.toLowerCase())
+  ) || [];
+
+  const outOfStock = filteredParts.filter((p: any) => p.quantity === 0) || [];
+  const lowStock = filteredParts.filter((p: any) => p.quantity > 0 && p.quantity <= (p.minStock || 2)) || [];
+  const inStock = filteredParts.filter((p: any) => p.quantity > (p.minStock || 2)) || [];
 
   return (
     <div className="p-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Stores & Inventory</h1>
-          <p className="text-gray-600 mt-2">Manage spare parts and inventory levels</p>
-        </div>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-3xl font-bold">Stores & Inventory</h1>
+            <p className="text-gray-600 mt-2">Manage spare parts and inventory levels</p>
+          </div>
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -197,6 +204,15 @@ export default function Stores() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
+        <div className="mt-4">
+          <Input
+            placeholder="Search by part code or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-md"
+          />
+        </div>
       </div>
 
       {/* Summary Cards */}

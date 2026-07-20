@@ -96,6 +96,9 @@ export default function DefectControl() {
         return "bg-gray-100 text-gray-800";
     }
   };
+  const getActionLogsForDefect = (defectId: number) => {
+    return (allActionLogs || []).filter((log: any) => log.defectId === defectId);
+  };
 
   if (loadingAircraft) {
     return (
@@ -166,6 +169,22 @@ export default function DefectControl() {
                           <p className="text-xs text-gray-500 mb-4">
                             Reported: {new Date(defect.createdAt).toLocaleDateString()}
                           </p>
+
+                          {/* Action History */}
+                          {getActionLogsForDefect(defect.id).length > 0 && (
+                            <div className="mb-4 p-3 bg-blue-50 rounded border border-blue-200">
+                              <p className="text-sm font-semibold text-blue-900 mb-2">Action History:</p>
+                              <div className="space-y-2">
+                                {getActionLogsForDefect(defect.id).map((log: any) => (
+                                  <div key={log.id} className="text-xs text-blue-800">
+                                    <p className="font-medium">{log.actionTaken}</p>
+                                    {log.nextAction && <p className="text-blue-700 mt-1">Next: {log.nextAction}</p>}
+                                    <p className="text-blue-600 mt-1">{new Date(log.createdAt).toLocaleString()}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
 
                           <div className="flex gap-2 flex-wrap">
                             <Dialog open={actionDialogOpen && selectedDefectId === defect.id} onOpenChange={(open) => {
