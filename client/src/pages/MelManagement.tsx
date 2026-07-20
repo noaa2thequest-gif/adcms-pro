@@ -13,6 +13,7 @@ import { toast } from "sonner";
 export default function MelManagement() {
   const { data: aircraft, isLoading: loadingAircraft } = trpc.aircraft.list.useQuery();
   const { data: melItems, refetch: refetchMelItems } = trpc.mel.list.useQuery({});
+  const { data: allDefects } = trpc.defect.list.useQuery({});
 
   const updateMelMutation = trpc.mel.update.useMutation();
 
@@ -44,8 +45,10 @@ export default function MelManagement() {
   };
 
   const getAircraftName = (defectId: number) => {
-    // This is a simplified lookup - in production, you'd want to join the data
-    return "Aircraft";
+    const defect = allDefects?.find((d: any) => d.id === defectId);
+    if (!defect) return "Unknown";
+    const aircraft_item = aircraft?.find((a: any) => a.id === defect.aircraftId);
+    return aircraft_item?.registration || "Unknown";
   };
 
   const getCategoryColor = (category: string) => {

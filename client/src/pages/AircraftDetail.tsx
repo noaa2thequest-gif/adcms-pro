@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, AlertTriangle, ArrowLeft, Edit2 } from "lucide-react";
-import { useLocation } from "wouter";
-import { useEffect, useState } from "react";
+import { useLocation, useRoute } from "wouter";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -12,16 +12,8 @@ import { toast } from "sonner";
 
 export default function AircraftDetail() {
   const [, navigate] = useLocation();
-  const [aircraftId, setAircraftId] = useState<number | null>(null);
-
-  // Extract aircraft ID from URL
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-    if (id) {
-      setAircraftId(parseInt(id));
-    }
-  }, []);
+  const [match, params] = useRoute("/aircraft/:id");
+  const aircraftId = match && params?.id ? parseInt(params.id) : null;
 
   const { data: aircraft, isLoading: loadingAircraft } = trpc.aircraft.get.useQuery(
     { id: aircraftId || 0 },

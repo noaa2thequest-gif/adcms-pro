@@ -27,6 +27,7 @@ function Router() {
       <Route path={"/mel-management"} component={MelManagement} />
       <Route path={"/mcc-center"} component={MccCenter} />
       <Route path={"/stores"} component={Stores} />
+      <Route path={"/aircraft/:id"} component={AircraftDetail} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

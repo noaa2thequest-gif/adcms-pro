@@ -70,17 +70,16 @@
 - [x] Add defect.delete procedure and UI
 - [x] Add sparePart.delete procedure and UI
 - [x] Navigation/Sidebar for page access
-- [ ] Fix Aircraft Detail routing (wire /aircraft/:id route)
-- [ ] Fix MEL Management placeholder data (getAircraftName)
-- [ ] Implement MEL expiry recalculation on category change
+- [x] Fix Aircraft Detail routing (wire /aircraft/:id route)
+- [x] Fix MEL Management placeholder data (getAircraftName)
+- [x] Implement MEL expiry recalculation on category change
 - [ ] Add automatic action log creation on defect create/update/close
 - [ ] Support custom Connection 1/2 MEL expiry input
 - [ ] Validate MEL-required fields in New Defect Form
 - [ ] Persist and use openDate field in defects
 - [ ] Tighten RBAC enforcement across all procedures
-- [ ] Add navigation/sidebar component for page access
 - [ ] Implement role-based UI restrictions (show/hide features)
 - [ ] Add inventory search and filtering
 - [ ] Add low stock alerts to Stores page
 - [ ] Display action history per defect on detail view
-- [ ] Write vitest tests for critical procedures
+- [x] Write vitest tests for critical procedures
