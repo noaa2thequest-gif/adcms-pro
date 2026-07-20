@@ -328,6 +328,98 @@ export const appRouter = router({
       }),
   }),
 
+  // Surveillance & SAFA procedures
+  surveillance: router({
+    list: protectedProcedure
+      .input(z.object({ aircraftId: z.number().optional() }).optional())
+      .query(async ({ input }) => {
+        return db.listSurveillanceReports(input?.aircraftId);
+      }),
+
+    get: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return db.getSurveillanceReportById(input.id);
+      }),
+
+    create: protectedProcedure
+      .input(
+        z.object({
+          aircraftId: z.number(),
+          title: z.string(),
+          description: z.string(),
+          auditType: z.enum(["SURVEILLANCE", "SAFA"]),
+          findings: z.string().optional(),
+          severity: z.enum(["CRITICAL", "MAJOR", "MINOR", "OBSERVATION"]).optional(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
+        
+        const allowedRoles = ["quality_auditor", "supervisor", "technician", "admin", "surveillance"];
+        if (!allowedRoles.includes(ctx.user.role)) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Only auditors can create surveillance reports" });
+        }
+
+        return db.createSurveillanceReport({
+          ...input,
+          reportedBy: ctx.user.id,
+          status: "OPEN",
+          severity: input.severity || "OBSERVATION",
+        });
+      }),
+
+    respond: protectedProcedure
+      .input(
+        z.object({
+          id: z.number(),
+          actionTaken: z.string(),
+          status: z.enum(["IN_PROGRESS", "CLOSED"]),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
+        
+        const allowedRoles = ["technician", "mcc", "admin"];
+        if (!allowedRoles.includes(ctx.user.role)) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Only technicians can respond" });
+        }
+
+        return db.updateSurveillanceReport(input.id, {
+          actionTaken: input.actionTaken,
+          status: input.status,
+          respondedBy: ctx.user.id,
+          respondedAt: new Date(),
+        });
+      }),
+
+    close: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
+        
+        const allowedRoles = ["quality_auditor", "admin"];
+        if (!allowedRoles.includes(ctx.user.role)) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Only quality auditors can close" });
+        }
+
+        return db.updateSurveillanceReport(input.id, {
+          status: "SENT_TO_QA",
+          closedAt: new Date(),
+          sentToQaAt: new Date(),
+        });
+      }),
+
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (!isAdmin(ctx.user?.role)) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Only admins can delete" });
+        }
+        return db.deleteSurveillanceReport(input.id);
+      }),
+  }),
+
   // Spare parts procedures
   sparePart: router({
     list: protectedProcedure.query(async () => {

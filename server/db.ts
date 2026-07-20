@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq } from "drizzle-orm";
-import { InsertUser, users, aircraft, InsertAircraft, defects, InsertDefect, melItems, InsertMelItem, cabinDefects, InsertCabinDefect, actionLogs, InsertActionLog, spareParts, InsertSparePart } from "../drizzle/schema";
+import { InsertUser, users, aircraft, InsertAircraft, defects, InsertDefect, melItems, InsertMelItem, cabinDefects, InsertCabinDefect, actionLogs, InsertActionLog, spareParts, InsertSparePart, surveillanceReports, InsertSurveillanceReport, SurveillanceReport } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -262,4 +262,40 @@ export async function deleteSparePartById(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return db.delete(spareParts).where(eq(spareParts.id, id));
+}
+
+// Surveillance Reports queries
+export async function listSurveillanceReports(aircraftId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (aircraftId) {
+    return db.select().from(surveillanceReports).where(eq(surveillanceReports.aircraftId, aircraftId)).orderBy(surveillanceReports.createdAt);
+  }
+  return db.select().from(surveillanceReports).orderBy(surveillanceReports.createdAt);
+}
+
+export async function getSurveillanceReportById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(surveillanceReports).where(eq(surveillanceReports.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createSurveillanceReport(data: InsertSurveillanceReport) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(surveillanceReports).values(data);
+}
+
+export async function updateSurveillanceReport(id: number, data: Partial<SurveillanceReport>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.update(surveillanceReports).set(data).where(eq(surveillanceReports.id, id));
+}
+
+export async function deleteSurveillanceReport(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.delete(surveillanceReports).where(eq(surveillanceReports.id, id));
 }

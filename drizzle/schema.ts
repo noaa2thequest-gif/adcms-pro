@@ -153,3 +153,27 @@ export const usersUpdated = mysqlTable("users_updated", {
 
 export type UserUpdated = typeof usersUpdated.$inferSelect;
 export type InsertUserUpdated = typeof usersUpdated.$inferInsert;
+
+// Surveillance & SAFA Audit Reports table
+export const surveillanceReports = mysqlTable("surveillanceReports", {
+  id: int("id").autoincrement().primaryKey(),
+  aircraftId: int("aircraftId").notNull(),
+  title: varchar("title", { length: 200 }).notNull(),
+  description: text("description").notNull(),
+  auditType: mysqlEnum("auditType", ["SURVEILLANCE", "SAFA"]).default("SURVEILLANCE").notNull(),
+  findings: text("findings"),
+  severity: mysqlEnum("severity", ["CRITICAL", "MAJOR", "MINOR", "OBSERVATION"]).default("OBSERVATION").notNull(),
+  status: mysqlEnum("status", ["OPEN", "IN_PROGRESS", "CLOSED", "SENT_TO_QA"]).default("OPEN").notNull(),
+  reportedBy: int("reportedBy").notNull(),
+  assignedTo: int("assignedTo"),
+  actionTaken: text("actionTaken"),
+  respondedBy: int("respondedBy"),
+  respondedAt: timestamp("respondedAt"),
+  sentToQaAt: timestamp("sentToQaAt"),
+  closedAt: timestamp("closedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SurveillanceReport = typeof surveillanceReports.$inferSelect;
+export type InsertSurveillanceReport = typeof surveillanceReports.$inferInsert;

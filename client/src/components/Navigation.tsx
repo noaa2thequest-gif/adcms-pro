@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, Home, Plane, AlertCircle, Plus, FileText, Settings, Package, BarChart3, Users } from "lucide-react";
+import { Menu, X, LogOut, Home, Plane, AlertCircle, Plus, FileText, Settings, Package, BarChart3, Users, Eye } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Navigation() {
@@ -21,6 +21,7 @@ export default function Navigation() {
     { label: "مركز التحكم بالصيانة", icon: AlertCircle, path: "/mcc-center", roles: ["admin", "mcc"] },
     { label: "المستودع والقطع", icon: Package, path: "/stores", roles: ["admin"] },
     { label: "التقارير والتصدير", icon: BarChart3, path: "/reports", roles: ["admin", "mcc"] },
+    { label: "Surveillance & SAFA", icon: Eye, path: "/surveillance", roles: ["admin", "quality_auditor", "supervisor", "technician", "surveillance"] },
     { label: "إدارة المستخدمين", icon: Users, path: "/user-management", roles: ["admin"] },
   ];
 

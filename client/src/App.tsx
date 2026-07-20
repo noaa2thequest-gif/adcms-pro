@@ -16,6 +16,7 @@ import Stores from "./pages/Stores";
 import AircraftDetail from "./pages/AircraftDetail";
 import Reports from "./pages/Reports";
 import UserManagement from "./pages/UserManagement";
+import Surveillance from "./pages/Surveillance";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -31,6 +32,7 @@ function Router() {
       <Route path={"/stores"} component={Stores} />
       <Route path={"/reports"} component={Reports} />
       <Route path={"/user-management"} component={UserManagement} />
+      <Route path={"/surveillance"} component={Surveillance} />
       <Route path={"/aircraft/:id"} component={AircraftDetail} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

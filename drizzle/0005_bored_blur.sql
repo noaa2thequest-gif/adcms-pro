@@ -1,0 +1,20 @@
+CREATE TABLE `surveillanceReports` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`aircraftId` int NOT NULL,
+	`title` varchar(200) NOT NULL,
+	`description` text NOT NULL,
+	`auditType` enum('SURVEILLANCE','SAFA') NOT NULL DEFAULT 'SURVEILLANCE',
+	`findings` text,
+	`severity` enum('CRITICAL','MAJOR','MINOR','OBSERVATION') NOT NULL DEFAULT 'OBSERVATION',
+	`status` enum('OPEN','IN_PROGRESS','CLOSED','SENT_TO_QA') NOT NULL DEFAULT 'OPEN',
+	`reportedBy` int NOT NULL,
+	`assignedTo` int,
+	`actionTaken` text,
+	`respondedBy` int,
+	`respondedAt` timestamp,
+	`sentToQaAt` timestamp,
+	`closedAt` timestamp,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `surveillanceReports_id` PRIMARY KEY(`id`)
+);
