@@ -83,3 +83,17 @@
 - [x] Add low stock alerts to Stores page
 - [x] Display action history per defect on detail view
 - [x] Write vitest tests for critical procedures
+
+
+## Phase 8: Report Export (PDF)
+- [x] Add report generation procedures to backend (defects, MEL, actions, inventory)
+- [x] Create PDF export utilities using pdf-lib
+- [x] Add Reports page with export buttons
+- [x] Generate defect report PDF
+- [x] Generate MEL report PDF
+- [x] Generate action log report PDF
+- [x] Generate inventory report PDF
+- [x] Add date range filtering for reports
+- [x] Add Reports to navigation menu
+- [x] Test PDF generation and download
+- [ ] Save checkpoint

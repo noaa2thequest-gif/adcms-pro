@@ -5,6 +5,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import * as db from "./db";
+import { reportRouter } from "./report-routers";
 
 // Helper to check if user is admin
 function isAdmin(role: string | undefined) {
@@ -381,7 +382,7 @@ export const appRouter = router({
         }
         return db.deleteSparePartById(input.id);
       }),
-  }),
+    }),
+  report: router(reportRouter),
 });
-
 export type AppRouter = typeof appRouter;

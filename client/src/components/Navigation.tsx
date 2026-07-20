@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, Home, Plane, AlertCircle, Plus, FileText, Settings, Package } from "lucide-react";
+import { Menu, X, LogOut, Home, Plane, AlertCircle, Plus, FileText, Settings, Package, BarChart3 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Navigation() {
@@ -20,6 +20,7 @@ export default function Navigation() {
     { label: "إدارة الصيانة المؤجلة", icon: Settings, path: "/mel-management", roles: ["admin", "mcc"] },
     { label: "مركز التحكم بالصيانة", icon: AlertCircle, path: "/mcc-center", roles: ["admin", "mcc"] },
     { label: "المستودع والقطع", icon: Package, path: "/stores", roles: ["admin"] },
+    { label: "التقارير والتصدير", icon: BarChart3, path: "/reports", roles: ["admin", "mcc"] },
   ];
 
   const menuItems = allMenuItems.filter((item) => 
