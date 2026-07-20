@@ -151,7 +151,7 @@ export default function SurveillancePage() {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium">Aircraft *</label>
-            <Select value={selectedAircraft?.toString() || ""} onValueChange={(v) => setSelectedAircraft(v ? Number(v) : undefined)}>
+            <Select value={selectedAircraft ? String(selectedAircraft) : ""} onValueChange={(v) => setSelectedAircraft(v ? Number(v) : undefined)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Aircraft" />
               </SelectTrigger>
@@ -219,7 +219,7 @@ export default function SurveillancePage() {
       {/* Aircraft Selection */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Filter by Aircraft</label>
-        <Select value={selectedAircraft?.toString() || ""} onValueChange={(v) => setSelectedAircraft(v ? Number(v) : undefined)}>
+        <Select value={selectedAircraft ? String(selectedAircraft) : ""} onValueChange={(v) => setSelectedAircraft(v ? Number(v) : undefined)}>
           <SelectTrigger>
             <SelectValue placeholder="All Aircraft" />
           </SelectTrigger>
