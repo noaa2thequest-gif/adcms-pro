@@ -5,7 +5,6 @@ import { startLogin } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Menu, X, LogOut, Home, Plane, AlertCircle, Plus, FileText, Settings, Package } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
 
 export default function Navigation() {
   const [, navigate] = useLocation();
