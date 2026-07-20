@@ -133,7 +133,9 @@ export default function DefectControl() {
   };
 
   const getSurveillanceForAircraft = (aircraftId: number) => {
-    return (allSurveillance || []).filter((s: any) => s.aircraftId === aircraftId && s.status !== "SENT_TO_QA");
+    const filtered = (allSurveillance || []).filter((s: any) => s.aircraftId === aircraftId && ["OPEN", "IN_PROGRESS"].includes(s.status));
+    console.log(`Surveillance for aircraft ${aircraftId}:`, filtered);
+    return filtered;
   };
 
   const getStatusBadgeColor = (status: string) => {
@@ -172,6 +174,15 @@ export default function DefectControl() {
     return (allActionLogs || []).filter((log: any) => log.defectId === defectId);
   };
 
+  const formatDate = (date: any) => {
+    if (!date) return "";
+    try {
+      return new Date(date).toLocaleString();
+    } catch {
+      return "";
+    }
+  };
+
   if (loadingAircraft) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -186,6 +197,7 @@ export default function DefectControl() {
         <div>
           <h1 className="text-3xl font-bold">Defect Control</h1>
           <p className="text-gray-600 mt-2">Manage aircraft defects and surveillance reports</p>
+          <p className="text-xs text-gray-500 mt-1">Total Surveillance: {allSurveillance?.length || 0}</p>
         </div>
         <Button onClick={() => navigate("/new-defect")} className="gap-2">
           <Plus className="w-4 h-4" />
@@ -265,7 +277,7 @@ export default function DefectControl() {
                                         <div key={log.id} className="text-xs text-blue-800">
                                           <p className="font-medium">{log.actionTaken}</p>
                                           {log.nextAction && <p className="text-blue-700 mt-1">Next: {log.nextAction}</p>}
-                                          <p className="text-blue-600 mt-1">{new Date(log.createdAt).toLocaleString()}</p>
+                                          <p className="text-blue-600 mt-1">{formatDate(log.timestamp)}</p>
                                         </div>
                                       ))}
                                     </div>
@@ -394,7 +406,7 @@ export default function DefectControl() {
                                 </div>
 
                                 <p className="text-xs text-gray-500 mb-4">
-                                  Reported: {new Date(report.createdAt).toLocaleDateString()}
+                                  Reported: {formatDate(report.createdAt)}
                                 </p>
 
                                 {report.actionTaken && (
@@ -402,7 +414,7 @@ export default function DefectControl() {
                                     <p className="text-sm font-semibold text-green-900 mb-2">Action Taken:</p>
                                     <p className="text-sm text-green-800">{report.actionTaken}</p>
                                     {report.respondedAt && (
-                                      <p className="text-xs text-green-600 mt-2">Responded: {new Date(report.respondedAt).toLocaleString()}</p>
+                                      <p className="text-xs text-green-600 mt-2">Responded: {formatDate(report.respondedAt)}</p>
                                     )}
                                   </div>
                                 )}

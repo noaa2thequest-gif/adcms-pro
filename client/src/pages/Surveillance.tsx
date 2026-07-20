@@ -151,7 +151,7 @@ export default function SurveillancePage() {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium">Aircraft *</label>
-            <Select value={selectedAircraft ? String(selectedAircraft) : ""} onValueChange={(v) => setSelectedAircraft(v ? Number(v) : undefined)}>
+            <Select value={selectedAircraft ? String(selectedAircraft) : "none"} onValueChange={(v) => setSelectedAircraft(v === "none" ? undefined : Number(v))}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Aircraft" />
               </SelectTrigger>
@@ -219,11 +219,12 @@ export default function SurveillancePage() {
       {/* Aircraft Selection */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Filter by Aircraft</label>
-        <Select value={selectedAircraft ? String(selectedAircraft) : ""} onValueChange={(v) => setSelectedAircraft(v ? Number(v) : undefined)}>
+        <Select value={selectedAircraft ? String(selectedAircraft) : "all"} onValueChange={(v) => setSelectedAircraft(v === "all" ? undefined : Number(v))}>
           <SelectTrigger>
             <SelectValue placeholder="All Aircraft" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">All Aircraft</SelectItem>
             {aircraftQuery.data?.map((ac) => (
               <SelectItem key={ac.id} value={ac.id.toString()}>
                 {ac.registration} - {ac.model}
