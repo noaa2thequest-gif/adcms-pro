@@ -5,10 +5,19 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, AlertTriangle, ChevronDown, ChevronUp, Plus, CheckCircle, MessageSquare } from "lucide-react";
+import { Loader2, AlertTriangle, ChevronDown, ChevronUp, Plus, CheckCircle, MessageSquare, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function DefectControl() {
   const [, navigate] = useLocation();
@@ -18,9 +27,11 @@ export default function DefectControl() {
   
   const closeDefectMutation = trpc.defect.close.useMutation();
   const createActionLogMutation = trpc.actionLog.create.useMutation();
+  const deleteDefectMutation = trpc.defect.delete.useMutation();
 
   const [expandedAircraft, setExpandedAircraft] = useState<number | null>(null);
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedDefectId, setSelectedDefectId] = useState<number | null>(null);
   const [actionText, setActionText] = useState("");
   const [nextActionText, setNextActionText] = useState("");
@@ -32,6 +43,18 @@ export default function DefectControl() {
       refetchDefects();
     } catch (error) {
       toast.error("Failed to close defect");
+    }
+  };
+
+  const handleDeleteDefect = async () => {
+    if (!selectedDefectId) return;
+    try {
+      await deleteDefectMutation.mutateAsync({ id: selectedDefectId });
+      toast.success("Defect deleted successfully");
+      setDeleteDialogOpen(false);
+      refetchDefects();
+    } catch (error) {
+      toast.error("Failed to delete defect");
     }
   };
 
@@ -201,6 +224,38 @@ export default function DefectControl() {
                               <CheckCircle className="w-4 h-4" />
                               Close Defect
                             </Button>
+
+                            <AlertDialog open={deleteDialogOpen && selectedDefectId === defect.id} onOpenChange={(open) => {
+                              setDeleteDialogOpen(open);
+                              if (open) setSelectedDefectId(defect.id);
+                            }}>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="gap-2"
+                                onClick={() => {
+                                  setSelectedDefectId(defect.id);
+                                  setDeleteDialogOpen(true);
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                Delete
+                              </Button>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Delete Defect</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete this defect? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <div className="flex gap-2 justify-end">
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={handleDeleteDefect} className="bg-red-600 hover:bg-red-700">
+                                    Delete
+                                  </AlertDialogAction>
+                                </div>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </div>
                         </div>
                       ))}

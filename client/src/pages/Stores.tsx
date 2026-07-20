@@ -6,18 +6,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, AlertTriangle, Plus, Edit2 } from "lucide-react";
+import { Loader2, AlertTriangle, Plus, Edit2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Stores() {
   const { data: spareParts, isLoading: loadingSpareParts, refetch: refetchSpareParts } = trpc.sparePart.list.useQuery();
 
   const createSparePartMutation = trpc.sparePart.create.useMutation();
   const updateSparePartMutation = trpc.sparePart.update.useMutation();
+  const deleteSparePartMutation = trpc.sparePart.delete.useMutation();
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPartId, setSelectedPartId] = useState<number | null>(null);
 
   const [partCode, setPartCode] = useState("");
@@ -50,6 +61,22 @@ export default function Stores() {
       refetchSpareParts();
     } catch (error) {
       toast.error("Failed to create spare part");
+    }
+  };
+
+  const handleDeleteSparePart = async () => {
+    if (!selectedPartId) {
+      toast.error("No part selected");
+      return;
+    }
+
+    try {
+      await deleteSparePartMutation.mutateAsync({ id: selectedPartId });
+      toast.success("Spare part deleted successfully");
+      setDeleteDialogOpen(false);
+      refetchSpareParts();
+    } catch (error) {
+      toast.error("Failed to delete spare part");
     }
   };
 
@@ -284,6 +311,38 @@ export default function Stores() {
                         </div>
                       </DialogContent>
                     </Dialog>
+
+                    <AlertDialog open={deleteDialogOpen && selectedPartId === part.id} onOpenChange={(open) => {
+                      setDeleteDialogOpen(open);
+                      if (open) setSelectedPartId(part.id);
+                    }}>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => {
+                          setSelectedPartId(part.id);
+                          setDeleteDialogOpen(true);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </Button>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Spare Part</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this spare part? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <div className="flex gap-2 justify-end">
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleDeleteSparePart} className="bg-red-600 hover:bg-red-700">
+                            Delete
+                          </AlertDialogAction>
+                        </div>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </CardContent>
                 </Card>
               ))}
@@ -373,6 +432,38 @@ export default function Stores() {
                         </div>
                       </DialogContent>
                     </Dialog>
+
+                    <AlertDialog open={deleteDialogOpen && selectedPartId === part.id} onOpenChange={(open) => {
+                      setDeleteDialogOpen(open);
+                      if (open) setSelectedPartId(part.id);
+                    }}>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => {
+                          setSelectedPartId(part.id);
+                          setDeleteDialogOpen(true);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </Button>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Spare Part</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this spare part? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <div className="flex gap-2 justify-end">
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleDeleteSparePart} className="bg-red-600 hover:bg-red-700">
+                            Delete
+                          </AlertDialogAction>
+                        </div>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </CardContent>
                 </Card>
               ))}
@@ -459,6 +550,38 @@ export default function Stores() {
                         </div>
                       </DialogContent>
                     </Dialog>
+
+                    <AlertDialog open={deleteDialogOpen && selectedPartId === part.id} onOpenChange={(open) => {
+                      setDeleteDialogOpen(open);
+                      if (open) setSelectedPartId(part.id);
+                    }}>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => {
+                          setSelectedPartId(part.id);
+                          setDeleteDialogOpen(true);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </Button>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Spare Part</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete this spare part? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <div className="flex gap-2 justify-end">
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleDeleteSparePart} className="bg-red-600 hover:bg-red-700">
+                            Delete
+                          </AlertDialogAction>
+                        </div>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </CardContent>
                 </Card>
               ))}

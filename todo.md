@@ -67,8 +67,9 @@
 
 
 ## Phase 7: Bug Fixes & Refinements
-- [ ] Add defect.delete procedure and UI
-- [ ] Add sparePart.delete procedure and UI
+- [x] Add defect.delete procedure and UI
+- [x] Add sparePart.delete procedure and UI
+- [x] Navigation/Sidebar for page access
 - [ ] Fix Aircraft Detail routing (wire /aircraft/:id route)
 - [ ] Fix MEL Management placeholder data (getAircraftName)
 - [ ] Implement MEL expiry recalculation on category change
