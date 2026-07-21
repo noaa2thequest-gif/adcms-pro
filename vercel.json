@@ -1,0 +1,10 @@
+{
+  "buildCommand": "pnpm run build",
+  "startCommand": "NODE_ENV=production node dist/index.js",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": null,
+  "outputDirectory": "dist",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
